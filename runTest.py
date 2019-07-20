@@ -5,5 +5,8 @@
 from selenium import webdriver
 
 driver = webdriver.Chrome()
-
-driver.find_element_by_xpath().is_displayed()
+driver.get('https://www.baidu.com/')
+driver.get('https://www.cnblogs.com/feng0815/p/8334144.html')
+c = driver.get_cookies()
+print(c)
+driver.close()
