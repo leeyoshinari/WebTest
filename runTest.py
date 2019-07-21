@@ -2,11 +2,14 @@
 # -*- coding:utf-8 -*-
 # Author: leeyoshinari
 
-from selenium import webdriver
+from common.Testing import Testing
 
-driver = webdriver.Chrome()
-driver.get('https://www.baidu.com/')
-driver.get('https://www.cnblogs.com/feng0815/p/8334144.html')
-c = driver.get_cookies()
-print(c)
-driver.close()
+
+def main():
+	t = Testing()
+	t.test()
+	del t
+
+
+if __name__ == '__main__':
+	main()
