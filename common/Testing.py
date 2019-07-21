@@ -11,7 +11,6 @@ from common.ExcelController import ExcelController
 from common.ElementController import ElementController
 from common.HtmlController import HtmlController
 from common.EmailController import sendMsg
-from common.timeoutLimit import timeoutlimit
 from common.logger import logger
 import config as cfg
 
@@ -111,6 +110,7 @@ class Testing(object):
 									js = js.format(self.get_value(step['input']))
 								if step['result']:
 									self.local_variable.update({step['result']: self.ele.execute_script(js)})
+									reason = 'JS脚本运行结果：{}'.format(self.local_variable[step['result']])
 								else:
 									self.ele.execute_script(js)
 							elif step['method'] == 'verify':

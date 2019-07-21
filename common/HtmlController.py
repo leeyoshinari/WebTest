@@ -69,7 +69,7 @@ class HtmlController(object):
 
 	@all_step.setter
 	def all_step(self, value):
-		color = int(value['caseId']) % 2
+		color = int(value['sceneId']) % 2
 		caseId = self.td.format(value['caseId'])
 		sceneId = self.td.format(value['sceneId'])
 		caseName = self.td.format(value['caseName'])

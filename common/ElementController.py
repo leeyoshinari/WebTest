@@ -18,7 +18,7 @@ class ElementExistException(Exception):
 class Element(object):
 	def __init__(self, driver):
 		self.driver = driver
-		self.timeout = cfg.ELEMENT_TIMEOUT
+		self.time_out = cfg.ELEMENT_TIMEOUT
 		self.save_to = cfg.SAVE_SHOT
 		self.shot_path = cfg.SHOT_PATH
 		self.shot_img = ''
@@ -38,32 +38,38 @@ class Element(object):
 		self.execute_js(js)
 		self.save_screenshot()
 
-	def find_ele_by_id(self, ele):
+	def find_ele_by_id(self, ele, timeout=None):
 		"""
 			通过id定位元素
 		"""
+		if not timeout:
+			timeout = self.time_out
 		try:
-			WebDriverWait(self.driver, self.timeout).until(EC.visibility_of_element_located((By.ID, ele)))
+			WebDriverWait(self.driver, timeout).until(EC.visibility_of_element_located((By.ID, ele)))
 			return self.driver.find_element_by_id(ele)
 		except Exception as err:
 			raise Exception('selenium.common.exceptions.TimeoutException')
 
-	def find_ele_by_xpath(self, ele):
+	def find_ele_by_xpath(self, ele, timeout=None):
 		"""
 			通过xpath定位元素
 		"""
+		if not timeout:
+			timeout = self.time_out
 		try:
-			WebDriverWait(self.driver, self.timeout).until(EC.visibility_of_element_located((By.XPATH, ele)))
+			WebDriverWait(self.driver, timeout).until(EC.visibility_of_element_located((By.XPATH, ele)))
 			return self.driver.find_element_by_xpath(ele)
 		except Exception as err:
 			raise Exception('selenium.common.exceptions.TimeoutException')
 
-	def find_eles_by_xpath(self, ele):
+	def find_eles_by_xpath(self, ele, timeout=None):
 		"""
 			通过xpath定位多个元素
 		"""
+		if not timeout:
+			timeout = self.time_out
 		try:
-			WebDriverWait(self.driver, self.timeout).until(EC.visibility_of_element_located((By.XPATH, ele)))
+			WebDriverWait(self.driver, timeout).until(EC.visibility_of_element_located((By.XPATH, ele)))
 			return self.driver.find_elements_by_xpath(ele)
 		except Exception as err:
 			raise Exception('selenium.common.exceptions.TimeoutException')
