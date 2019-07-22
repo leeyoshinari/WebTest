@@ -77,78 +77,7 @@ class Testing(object):
 
 				self.html.scene_num = 1
 				scene2case = scene['testcase'].split(',')
-				for case in scene2case:    # 场景执行所需要的用例id
-					self.html.case_num = 1
-					steps = self.excel.testcase[int(case)-1]   # 执行用例需要的所有操作步骤
-					logger.logger.info('开始执行用例{}，该用例共有{}个步骤'.format(case, len(steps)))
-					for step in steps:  # 遍历操作步骤
-						try:
-							result = 'Success'
-							reason = ''
-							time.sleep(int(step['timeout']))
-							logger.logger.info('开始执行“{}”'.format(step['step_name']))
-							if step['method'] == 'click':
-								self.ele.click(step['location'], step['location_way'])
-							elif step['method'] == 'open url':
-								self.ele.open_web(self.get_value(step['input']))
-							elif step['method'] == 'double click':
-								self.ele.double_click(step['location'], step['location_way'])
-							elif step['method'] == 'input':
-								self.ele.input(step['location'], self.get_value(step['input']), step['location_way'])
-							elif step['method'] == 'window title':
-								if step['result']:
-									self.local_variable.update({step['result']: self.ele.get_title()})
-							elif step['method'] == 'get attribute':
-								if step['result']:
-									self.local_variable.update({step['result']: self.ele.element_of_attribute(step['location'], step['attribute'], step['location_way'])})
-							elif step['method'] == 'get element num':
-								if step['result']:
-									self.local_variable.update({step['result']: self.ele.elements_of_num(step['location'], step['location_way'])})
-							elif step['method'] == 'execute java script':
-								js = step['javascript']
-								if step['input']:
-									js = js.format(self.get_value(step['input']))
-								if step['result']:
-									self.local_variable.update({step['result']: self.ele.execute_script(js)})
-									reason = 'JS脚本运行结果：{}'.format(self.local_variable[step['result']])
-								else:
-									self.ele.execute_script(js)
-							elif step['method'] == 'verify':
-								reason = '真实值：{}，期望值：{}，验证方式：{}'.format(self.get_value(step['truth']), self.get_value(step['expected']), step['verify'])
-								if self.verified(self.get_value(step['truth']), self.get_value(step['expected']), step['verify']):
-									result = 'Success'
-								else:
-									result = 'Fail'
-									logger.logger.error('“{}”执行失败，{}'.format(step['step_name'], reason))
-							elif step['method'] == 'open new window':
-								self.ele.open_new_web(self.get_value(step['input']))
-							elif step['method'] == 'clear':
-								self.ele.clear(step['location'], step['location_way'])
-
-							self.html.all_step = {
-								'sceneId': scene['id'],
-								'caseId': case,
-								'caseName': step['name'],
-								'stepName': step['step_name'],
-								'shotImg': self.ele.shot_img,
-								'result': result,
-								'reason': reason
-							}
-
-						except Exception as err:
-							self.html.all_step = {
-								'sceneId': scene['id'],
-								'caseId': case,
-								'caseName': step['name'],
-								'stepName': step['step_name'],
-								'shotImg': self.ele.shot_img,
-								'result': 'Fail',
-								'reason': err
-							}
-							self.html.case_fail = 1
-							logger.logger.error('“{}”执行失败，失败原因：{}'.format(step['step_name'], err))
-							logger.logger.error(traceback.format_exc())
-							break
+				self.run_cases(scene2case, scene)  # 执行用例
 
 			logger.logger.info('所有场景执行完毕！')
 			fail_html, html_name = self.html.writeHtml()
@@ -172,6 +101,87 @@ class Testing(object):
 
 		except Exception as err:
 			logger.logger.error(traceback.format_exc())
+
+	def run_cases(self, cases, scene):
+		for case in cases:  # 场景执行所需要的用例id
+			self.html.case_num = 1
+			steps = self.excel.testcase[int(case) - 1]  # 执行用例需要的所有操作步骤
+			logger.logger.info('开始执行用例{}，该用例共有{}个步骤'.format(case, len(steps)))
+			self.run_steps(steps, case, scene)   # 执行步骤
+
+	def run_steps(self, steps, case, scene):
+		for step in steps:  # 遍历操作步骤
+			try:
+				result = 'Success'
+				reason = ''
+				time.sleep(int(step['timeout']))
+				logger.logger.info('开始执行步骤：{}'.format(step['step_name']))
+				if step['method'] == 'click':
+					self.ele.click(step['location'], step['location_way'])
+				elif step['method'] == 'open url':
+					self.ele.open_web(self.get_value(step['input']))
+				elif step['method'] == 'double click':
+					self.ele.double_click(step['location'], step['location_way'])
+				elif step['method'] == 'input':
+					self.ele.input(step['location'], self.get_value(step['input']), step['location_way'])
+				elif step['method'] == 'window title':
+					if step['result']:
+						self.local_variable.update({step['result']: self.ele.get_title()})
+				elif step['method'] == 'get attribute':
+					if step['result']:
+						self.local_variable.update({step['result']: self.ele.element_of_attribute(step['location'], step['attribute'], step['location_way'])})
+				elif step['method'] == 'get element num':
+					if step['result']:
+						self.local_variable.update(
+							{step['result']: self.ele.elements_of_num(step['location'], step['location_way'])})
+				elif step['method'] == 'execute java script':
+					js = step['javascript']
+					if step['input']:
+						js = js.format(self.get_value(step['input']))
+					if step['result']:
+						self.local_variable.update({step['result']: self.ele.execute_script(js)})
+						reason = 'JS脚本运行结果：{}'.format(self.local_variable[step['result']])
+					else:
+						self.ele.execute_script(js)
+				elif step['method'] == 'verify':
+					reason = '真实值：{}，期望值：{}，验证方式：{}'.format(self.get_value(step['truth']), self.get_value(step['expected']), step['verify'])
+					if self.verified(self.get_value(step['truth']), self.get_value(step['expected']), step['verify']):
+						result = 'Success'
+					else:
+						result = 'Fail'
+						logger.logger.error('{} 执行失败，失败原因：{}'.format(step['step_name'], reason))
+				elif step['method'] == 'open new window':
+					self.ele.open_new_web(self.get_value(step['input']))
+				elif step['method'] == 'clear':
+					self.ele.clear(step['location'], step['location_way'])
+
+				self.html.all_step = {
+					'sceneId': scene['id'],
+					'caseId': case,
+					'caseName': step['name'],
+					'stepName': step['step_name'],
+					'shotImg': self.ele.shot_img,
+					'result': result,
+					'reason': reason
+				}
+
+				if result == 'Fail':
+					break
+
+			except Exception as err:
+				self.html.all_step = {
+					'sceneId': scene['id'],
+					'caseId': case,
+					'caseName': step['name'],
+					'stepName': step['step_name'],
+					'shotImg': self.ele.shot_img,
+					'result': 'Fail',
+					'reason': err
+				}
+				self.html.case_fail = 1
+				logger.logger.error('{} 执行失败，失败原因：{}'.format(step['step_name'], err))
+				logger.logger.error(traceback.format_exc())
+				break
 
 	def __del__(self):
 		del self.excel
