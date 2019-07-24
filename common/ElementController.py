@@ -74,6 +74,18 @@ class Element(object):
 		except Exception as err:
 			raise Exception('selenium.common.exceptions.TimeoutException')
 
+	def find_eles_by_id(self, ele, timeout=None):
+		"""
+			通过id定位多个元素
+		"""
+		if not timeout:
+			timeout = self.time_out
+		try:
+			WebDriverWait(self.driver, timeout).until(EC.visibility_of_element_located((By.ID, ele)))
+			return self.driver.find_elements_by_id(ele)
+		except Exception as err:
+			raise Exception('selenium.common.exceptions.TimeoutException')
+
 	def save_screenshot(self):
 		"""
 			保存浏览器截图
@@ -216,6 +228,8 @@ class ElementController(Element):
 		try:
 			if pattern == 'xpath':
 				elements = self.find_eles_by_xpath(ele)
+			if pattern == 'id':
+				elements = self.find_eles_by_id(ele)
 
 			self.save_screenshot()
 			return len(elements)

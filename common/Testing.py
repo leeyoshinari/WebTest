@@ -82,12 +82,14 @@ class Testing(object):
 			logger.logger.info('所有场景执行完毕！')
 			fail_html, html_name = self.html.writeHtml()
 
-			if self.is_email:
+			if self.is_email == 'neither':
+				pass
+			else:
 				mail_group = '{}.txt'.format(cfg.RECEIVER_NAME)
 				with open(mail_group, 'r') as f:
 					receiver = f.readline().strip()
 				msg = {
-					'subject': html_name,
+					'subject': self.html.success + html_name,
 					'smtp_server': cfg.SMTP_SERVER,
 					'sender_name': cfg.SENDER_NAME,
 					'sender_email': cfg.SENDER_EMAIL,
@@ -97,7 +99,12 @@ class Testing(object):
 					'fail_test': fail_html,
 					'all_test': os.path.join(cfg.RESULT_PATH, html_name + '.html')
 				}
-				sendMsg(msg)
+				if self.is_email == 'both':
+					sendMsg(msg)
+				elif len(self.html.fail_step) > 0 and self.is_email == 'failure':
+					sendMsg(msg)
+				elif len(self.html.fail_step) == 0 and self.is_email == 'success':
+					sendMsg(msg)
 
 		except Exception as err:
 			logger.logger.error(traceback.format_exc())
@@ -148,7 +155,7 @@ class Testing(object):
 					if self.verified(self.get_value(step['truth']), self.get_value(step['expected']), step['verify']):
 						result = 'Success'
 					else:
-						result = 'Fail'
+						result = 'Failure'
 						logger.logger.error('{} 执行失败，失败原因：{}'.format(step['step_name'], reason))
 				elif step['method'] == 'open new window':
 					self.ele.open_new_web(self.get_value(step['input']))
@@ -165,7 +172,7 @@ class Testing(object):
 					'reason': reason
 				}
 
-				if result == 'Fail':
+				if result == 'Failure':
 					break
 
 			except Exception as err:
@@ -175,7 +182,7 @@ class Testing(object):
 					'caseName': step['name'],
 					'stepName': step['step_name'],
 					'shotImg': self.ele.shot_img,
-					'result': 'Fail',
+					'result': 'Failure',
 					'reason': err
 				}
 				self.html.case_fail = 1

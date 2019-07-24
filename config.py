@@ -32,7 +32,8 @@ LINUX_PASSWORD = '123456'
 SERVER_PORT = 8888
 
 # 测试完成后是否自动发送邮件
-IS_EMAIL = True
+# success为只有全部成功了才发送邮件，failure为只要有失败就发送邮件，both为一直发邮件，neither为都不发邮件
+IS_EMAIL = 'both'
 # 邮箱配置，qq邮箱为smtp.qq.com
 # 所用的发件邮箱必须开启SMTP服务
 SMTP_SERVER = 'smtp.sina.com'
@@ -61,6 +62,6 @@ TABLE = '<table width="100%" border="1" cellspacing="0" cellpadding="6" align="c
 TABLE_HEAD = '<tr bgcolor="#99CCFF" align="center"><th width="7%">场景ID</th><th width="7%">用例ID</th><th width="16%">用例名称</th><th width="17%">步骤名称</th><th width="7%">测试结果</th><th width="16%">运行截图</th><th width="30%">失败原因/校验结果</th></tr>'
 TR = '<tr bgcolor="#{}">{}</tr>'
 TD = '<td>{}</td>'
-TD_FAIL = '<td><font color="red">Fail</font></td>'
+TD_FAIL = '<td><font color="red">Failure</font></td>'
 TD_SUCCESS = '<td><font color="blue">Success</font></td>'
 LAST = '<p style="color:blue">此邮件自动发出，如有疑问，请直接回复。</p>'

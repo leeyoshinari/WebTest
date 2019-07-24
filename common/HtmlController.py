@@ -11,6 +11,7 @@ from common.logger import logger
 class HtmlController(object):
 	def __init__(self):
 		self.path = cfg.RESULT_PATH
+		self.success = 'Success! '
 		self.start_time = time.time()
 		date_time = time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(self.start_time))
 		test_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.start_time))
@@ -75,19 +76,22 @@ class HtmlController(object):
 		caseName = self.td.format(value['caseName'])
 		stepName = self.td.format(value['stepName'])
 		shot_img = self.td.format(value['shotImg'])
-		if value['result'] == 'Fail':
+		if value['result'] == 'Failure':
 			result = self.td_fail.format(value['result'])
 		else:
 			result = self.td_success.format(value['result'])
 		reason = self.td.format(value['reason'])
 		res = self.tr.format(self.bg_color[color], '{}{}{}{}{}{}{}'.format(sceneId, caseId, caseName, stepName, result, shot_img, reason))
 
-		if value['result'] == 'Fail':
+		if value['result'] == 'Failure':
 			self.fail_step.append(res)
 
 		self._all_step.append(res)
 
 	def writeHtml(self):
+		if len(self.fail_step) > 0:
+			self.success = 'Failure! '
+
 		all_step_num = len(self._all_step)
 		success_rate = (1 - self.case_fail / self.case_num) * 100
 		spend_time = time.time() - self.start_time
