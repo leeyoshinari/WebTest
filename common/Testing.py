@@ -21,6 +21,7 @@ class Testing(object):
 		self.open_browser()
 
 		self.is_email = cfg.IS_EMAIL
+		self.shot_image = cfg.SHOT_IMAGE
 
 		self.excel = ExcelController()
 		self.ele = ElementController(self.driver)
@@ -89,7 +90,7 @@ class Testing(object):
 				with open(mail_group, 'r') as f:
 					receiver = f.readline().strip()
 				msg = {
-					'subject': self.html.success + html_name,
+					'subject': self.html.is_success + html_name,
 					'smtp_server': cfg.SMTP_SERVER,
 					'sender_name': cfg.SENDER_NAME,
 					'sender_email': cfg.SENDER_EMAIL,
@@ -167,7 +168,7 @@ class Testing(object):
 					'caseId': case,
 					'caseName': step['name'],
 					'stepName': step['step_name'],
-					'shotImg': self.ele.shot_img,
+					'shotImg': self.shot_image.format(self.ele.shot_img),
 					'result': result,
 					'reason': reason
 				}
@@ -181,7 +182,7 @@ class Testing(object):
 					'caseId': case,
 					'caseName': step['name'],
 					'stepName': step['step_name'],
-					'shotImg': self.ele.shot_img,
+					'shotImg': self.shot_image.format(self.ele.shot_img),
 					'result': 'Failure',
 					'reason': err
 				}

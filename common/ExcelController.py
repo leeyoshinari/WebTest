@@ -4,7 +4,6 @@
 
 import xlrd
 import config as cfg
-from common.logger import logger
 
 
 class ExcelController(object):

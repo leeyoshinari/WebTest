@@ -8,20 +8,20 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+from common.UploadController import FDFS
 import config as cfg
-
-
-class ElementExistException(Exception):
-	pass
 
 
 class Element(object):
 	def __init__(self, driver):
 		self.driver = driver
 		self.time_out = cfg.ELEMENT_TIMEOUT
-		self.save_to = cfg.SAVE_SHOT
+		self.save_shot_to = cfg.SAVE_SHOT
 		self.shot_path = cfg.SHOT_PATH
+		self.fdfs_url = cfg.FDFS_URL
 		self.shot_img = ''
+
+		self.fdfs = FDFS()
 
 		if not os.path.exists(self.shot_path):
 			os.mkdir(self.shot_path)
@@ -94,6 +94,11 @@ class Element(object):
 		pic_path = os.path.join(self.shot_path, '{}.png'.format(current_time))
 		self.shot_img = pic_path
 		self.driver.save_screenshot(pic_path)
+		if self.save_shot_to == 1:
+			remote_id = self.fdfs.upload_file(pic_path)
+			if remote_id:
+				self.shot_img = self.fdfs_url + remote_id
+				os.remove(pic_path)
 
 	def execute_js(self, js_command):
 		"""

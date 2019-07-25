@@ -5,9 +5,6 @@
 import os
 # 日志级别
 LOG_LEVEL = 'INFO'
-# 截图保存方式，0为保存到本地，1为保存到fastDFS
-# 建议保存至fastDFS，这样可以直接在测试报告中点击连接查看
-SAVE_SHOT = 0
 # 日志路径
 LOG_PATH = os.path.join(os.path.dirname(__file__), 'logs')
 # 页面截图保存路径
@@ -30,6 +27,16 @@ LINUX_IP = '127.0.0.1'
 LINUX_UAERNAME = 'root'
 LINUX_PASSWORD = '123456'
 SERVER_PORT = 8888
+
+# 运行过程中的截图保存方式
+# 0为保存到本地，1为保存到fastDFS，建议保存至fastDFS，这样其他人可以直接在测试报告中点击链接查看
+SAVE_SHOT = 0
+# fastDFS的client.conf文件路径
+CLIENT_PATH = os.path.join(os.path.dirname(__file__), 'client.conf')
+# fastDFS http访问地址
+FDFS_URL = 'http://127.0.0.1:88/'
+# fastDFS tracker地址见配置文件 client.conf
+# tracker_server=127.0.0.1:22122
 
 # 测试完成后是否自动发送邮件
 # success为只有全部成功了才发送邮件，failure为只要有失败就发送邮件，both为一直发邮件，neither为都不发邮件
@@ -59,9 +66,10 @@ SPAN = '<span style="font-size:14px; font-weight:normal">&nbsp;&nbsp;&nbsp;&nbsp
 OVERVIEW1 = '<p>&nbsp;&nbsp;&nbsp;&nbsp;场景总数：<font color="blue">{}</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用例总数：<font color="blue">{}</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;步骤总数：<font color="blue">{}</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;执行总耗时：<font color="blue">{:.2f}</font> s</p>'
 OVERVIEW2 = '<p>&nbsp;&nbsp;&nbsp;&nbsp;用例执行成功数：<font color="blue">{}</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用例执行失败数：<font color="red">{}</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;成功率：<font color="red">{:.2f}%</font></p>'
 TABLE = '<table width="100%" border="1" cellspacing="0" cellpadding="6" align="center">{}</table>'
-TABLE_HEAD = '<tr bgcolor="#99CCFF" align="center"><th width="7%">场景ID</th><th width="7%">用例ID</th><th width="16%">用例名称</th><th width="17%">步骤名称</th><th width="7%">测试结果</th><th width="16%">运行截图</th><th width="30%">失败原因/校验结果</th></tr>'
+TABLE_HEAD = '<tr bgcolor="#99CCFF" align="center"><th width="7%">场景ID</th><th width="7%">用例ID</th><th width="20%">用例名称</th><th width="20%">步骤名称</th><th width="7%">测试结果</th><th width="9%">运行截图</th><th width="30%">失败原因/校验结果</th></tr>'
 TR = '<tr bgcolor="#{}">{}</tr>'
 TD = '<td>{}</td>'
 TD_FAIL = '<td><font color="red">Failure</font></td>'
 TD_SUCCESS = '<td><font color="blue">Success</font></td>'
 LAST = '<p style="color:blue">此邮件自动发出，如有疑问，请直接回复。</p>'
+SHOT_IMAGE = '<a href="{}" target="_blank">查看图片</a>'

@@ -11,7 +11,7 @@ from common.logger import logger
 class HtmlController(object):
 	def __init__(self):
 		self.path = cfg.RESULT_PATH
-		self.success = 'Success! '
+		self.is_success = 'Success! '
 		self.start_time = time.time()
 		date_time = time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(self.start_time))
 		test_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.start_time))
@@ -90,7 +90,7 @@ class HtmlController(object):
 
 	def writeHtml(self):
 		if len(self.fail_step) > 0:
-			self.success = 'Failure! '
+			self.is_success = 'Failure! '
 
 		all_step_num = len(self._all_step)
 		success_rate = (1 - self.case_fail / self.case_num) * 100
