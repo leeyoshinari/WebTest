@@ -122,6 +122,7 @@ class ElementController(Element):
 		self.driver = driver
 
 	def click(self, ele, pattern='xpath'):
+		"""单击"""
 		try:
 			if pattern == 'id':
 				self.find_ele_by_id(ele).click()
@@ -134,6 +135,7 @@ class ElementController(Element):
 			raise Exception(err)
 
 	def double_click(self, ele, pattern='xpath'):
+		"""双击"""
 		try:
 			if pattern == 'id':
 				self.actionahains().double_click(self.find_ele_by_id(ele)).perform()
@@ -146,6 +148,9 @@ class ElementController(Element):
 			raise Exception(err)
 
 	def input(self, ele, text, pattern='xpath'):
+		"""
+			向输入框输入内容
+		"""
 		try:
 			if pattern == 'id':
 				self.find_ele_by_id(ele).send_keys(text)
@@ -158,6 +163,9 @@ class ElementController(Element):
 			raise Exception(err)
 
 	def clear(self, ele, pattern='xpath'):
+		"""
+			清空输入框
+		"""
 		try:
 			if pattern == 'id':
 				self.find_ele_by_id(ele).clear()
